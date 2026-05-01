@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Starlit Slice 🎂✨</title>
+
+<style>
+body {
+  margin: 0;
+  overflow: hidden;
+  text-align: center;
+  font-family: Arial;
+  color: white;
+  background: url('cakebg.jpg') no-repeat center center/cover;
+}
+
+/* BACK BUTTON */
+.back {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: white;
+  color: #ff4d6d;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  font-size: 20px;
+  border: none;
+}
+
+/* CAKE */
+.cake {
+  position: relative;
+  width: 320px;
+  height: 280px;
+  margin: 100px auto;
+}
+
+.slice {
+  position: absolute;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  transition: transform 1s ease;
+}
+
+.slice img {
+  width: 320px;
+  height: 280px;
+  object-fit: cover;
+}
+
+.left { left: 0; }
+.right { right: 0; }
+
+.right img {
+  margin-left: -160px;
+}
+
+/* CUT */
+.cut .left { transform: translateX(-60px); }
+.cut .right { transform: translateX(60px); }
+
+/* BUTTON STYLE */
+.btn {
+  margin-top: 20px;
+  padding: 12px 25px;
+  border-radius: 25px;
+  border: none;
+  background: white;
+  color: #ff4d6d;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+}
+
+/* BUBBLES */
+.bubble {
+  position: absolute;
+  bottom: -60px;
+  background: rgba(255,255,255,0.9);
+  color: #ff4d6d;
+  padding: 8px 14px;
+  border-radius: 20px;
+  animation: rise 6s linear infinite;
+}
+
+@keyframes rise {
+  to { transform: translateY(-1000px); }
+}
+
+#speaker {
+  margin-top: 15px;
+}
+</style>
+
+</head>
+
+<body>
+
+<button class="back" onclick="goBack()">←</button>
+
+<h1>✨ Starlit Slice 🎂✨</h1>
+
+<!-- 🎵 MUSIC -->
+<audio id="music" loop>
+  <source src="happy.mp3" type="audio/mpeg">
+</audio>
+
+<!-- 🎙️ VOICE -->
+<audio id="voicePlayer"></audio>
+
+<div id="cake" class="cake">
+  <div class="slice left"><img src="cake.png"></div>
+  <div class="slice right"><img src="cake.png"></div>
+</div>
+
+<!-- BUTTONS -->
+<button class="btn" onclick="startMusic()">🎵 Play Music</button>
+<button class="btn" onclick="cutCake()">✨ Slice the Cake</button>
+
+<p id="speaker"></p>
+
+<script>
+
+/* BACK */
+function goBack(){
+  window.location.href = "index.html";
+}
+
+/* MUSIC */
+function startMusic(){
+  document.getElementById("music").play();
+}
+
+/* CUT */
+function cutCake(){
+  let cake = document.getElementById("cake");
+
+  if(!cake.classList.contains("cut")){
+    cake.classList.add("cut");
+    playVoices();
+  }
+}
+
+/* VOICES */
+const voices = [
+  "voice1.mp3","voice2.mp3","voice3.mp3","voice4.mp3",
+  "voice5.mp3","voice6.mp3","voice7.mp3","voice8.mp3"
+];
+
+let current = 0;
+
+function playVoices(){
+  let p = document.getElementById("voicePlayer");
+
+  document.getElementById("speaker").innerText =
+    "Playing message " + (current + 1);
+
+  p.src = voices[current];
+  p.play();
+
+  p.onended = () => {
+    current++;
+    if(current < voices.length){
+      playVoices();
+    } else {
+      document.getElementById("speaker").innerText = "💖 That's all";
+    }
+  };
+}
+
+/* AUTO MUSIC AFTER FIRST CLICK */
+document.body.addEventListener("click",()=>{
+  document.getElementById("music").play();
+},{once:true});
+
+/* BUBBLES */
+const messages = [
+  "Happy Birthday 💖",
+  "You are amazing ✨",
+  "Stay happy always 😊",
+  "Lots of love 💕"
+];
+
+setInterval(()=>{
+  let b = document.createElement("div");
+  b.className="bubble";
+  b.innerText = messages[Math.floor(Math.random()*messages.length)];
+  b.style.left = Math.random()*window.innerWidth+"px";
+
+  document.body.appendChild(b);
+  setTimeout(()=>b.remove(),6000);
+},500);
+
+</script>
+
+</body>
+</html>

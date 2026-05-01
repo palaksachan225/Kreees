@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Kreethi 💖</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial;
+  text-align: center;
+  background: url('bg.jpg') no-repeat center center/cover;
+  color: white;
+}
+
+.overlay {
+  background: rgba(0,0,0,0.4);
+  min-height: 100vh;
+}
+
+/* PASSWORD PAGE */
+#intro {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* PASSWORD BOX */
+.pass-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.pass-box {
+  width: 50px;
+  height: 55px;
+  font-size: 22px;
+  text-align: center;
+  border-radius: 10px;
+  border: none;
+  background: rgba(255,255,255,0.85);
+}
+
+/* BUTTON */
+button {
+  padding: 10px 20px;
+  background: #ff4d6d;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  margin-top: 15px;
+  cursor: pointer;
+}
+
+/* ICON GRID */
+.icons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+  margin-top: 40px;
+  padding: 20px;
+}
+
+/* CARD */
+.card {
+  background: rgba(255,255,255,0.15);
+  backdrop-filter: blur(10px);
+  padding: 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.card:hover {
+  transform: scale(1.08);
+}
+
+/* IMAGE */
+.card img {
+  width: 90px;
+  height: 90px;
+  border-radius: 15px;
+}
+
+/* LABEL */
+.label {
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+/* VISIBILITY */
+.page { display: none; }
+</style>
+
+</head>
+
+<body>
+
+<div class="overlay">
+
+<!-- 🔐 PASSWORD -->
+<div id="intro" class="page">
+  <h1>💖 Enter Kreethi's World 💖</h1>
+  <p>Hint: The day you entered 👀</p>
+
+  <div class="pass-container">
+    <input class="pass-box" maxlength="1">
+    <input class="pass-box" maxlength="1">
+    <input class="pass-box" maxlength="1">
+    <input class="pass-box" maxlength="1">
+  </div>
+
+  <button onclick="checkPass()">Unlock ✨</button>
+  <p id="error"></p>
+</div>
+
+<!-- 🏠 HOME -->
+<div id="home" class="page">
+  <h1>✨ Kreethi’s World ✨</h1>
+
+  <div class="icons">
+
+    <!-- 💖 FOREVER -->
+    <div class="card" onclick="goToPage('forever.html')">
+      <img src="forever.jpg">
+      <div class="label">Little Forever 💖</div>
+    </div>
+
+    <!-- 📖 TINY TALES -->
+    <div class="card" onclick="goToPage('tiny.html')">
+      <img src="tiny.jpg">
+      <div class="label">Tiny Tales 📖</div>
+    </div>
+
+    <!-- 🎂 STARLIT SLICE -->
+    <div class="card" onclick="goToPage('cake.html')">
+      <img src="cakeicon.jpg">
+      <div class="label">Starlit Slice 🎂✨</div>
+    </div>
+
+  </div>
+</div>
+
+</div>
+
+<script>
+
+/* INPUT AUTO MOVE */
+const inputs = document.querySelectorAll(".pass-box");
+
+inputs.forEach((input, index) => {
+  input.addEventListener("input", () => {
+    if (input.value.length === 1 && index < inputs.length - 1) {
+      inputs[index + 1].focus();
+    }
+  });
+
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "Backspace" && input.value === "" && index > 0) {
+      inputs[index - 1].focus();
+    }
+  });
+});
+
+/* PASSWORD */
+function checkPass() {
+  let pass = "";
+  inputs.forEach(i => pass += i.value);
+
+  if (pass === "0205") {
+    sessionStorage.setItem("unlocked", "true");
+    showHome();
+  } else {
+    document.getElementById("error").innerText = "Wrong 😒";
+  }
+}
+
+/* SHOW HOME */
+function showHome(){
+  document.getElementById("intro").style.display = "none";
+  document.getElementById("home").style.display = "block";
+}
+
+/* SHOW INTRO */
+function showIntro(){
+  document.getElementById("intro").style.display = "flex";
+  document.getElementById("home").style.display = "none";
+}
+
+/* ON LOAD */
+window.onload = function(){
+  if(sessionStorage.getItem("unlocked") === "true"){
+    showHome();
+  } else {
+    showIntro();
+  }
+}
+
+/* NAVIGATION */
+function goToPage(page){
+  window.location.href = page;
+}
+
+</script>
+
+</body>
+</html> 
